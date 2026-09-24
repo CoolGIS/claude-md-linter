@@ -1,0 +1,61 @@
+{
+  "skill_name": "claude-md-linter",
+  "evals": [
+    {
+      "id": 1,
+      "name": "bloated-project-audit",
+      "prompt": "这个项目的 CLAUDE.md 我越写越长感觉太臃肿了，帮我按官方最佳实践检查一下能精简什么，列出来我看完再决定改不改",
+      "expected_output": "一份结构化报告，识别出多处违规：技术栈版本列表(frequently-changing)、项目结构文件树(file-by-file-description)、Vue组件开发指南和DRF教程(tutorial-prose)、代码风格陈词滥调(self-evident-advice)、路由配置说明和API请求规范(docs-link-material/derivable-from-code)。同时应保留开发命令、环境变量、Element Plus大表格gotcha。必须以diff预览形式展示，最后询问用户是否应用，不直接修改文件。",
+      "files": ["fixtures/bloated-project.md"],
+      "assertions": [
+        "identifies-version-list-as-cuttable",
+        "identifies-file-tree-as-cuttable",
+        "identifies-vue-tutorial-as-cuttable",
+        "identifies-platitudes-as-cuttable",
+        "identifies-concept-explanations-as-cuttable",
+        "preserves-build-commands",
+        "preserves-env-vars",
+        "preserves-element-plus-gotcha",
+        "includes-diff-preview",
+        "asks-before-modifying",
+        "chinese-report"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "gotchas-vs-bloat-en",
+      "prompt": "audit this CLAUDE.md for me — is there anything i should cut to make it leaner? show me what to remove and why",
+      "expected_output": "英文报告。应识别DRF教程段落(tutorial-prose)、Celery概念解释(tutorial-prose)、项目结构描述(file-by-file-description)、代码风格段(self-evident-advice)为可砍内容。必须保留三个Database gotchas、Architecture decisions、环境变量和命令、DATABASE_URL坑。报告须有diff预览和询问步骤，不直接改文件。",
+      "files": ["fixtures/mixed-quality.md"],
+      "assertions": [
+        "identifies-drf-tutorial",
+        "identifies-celery-tutorial",
+        "identifies-project-structure-descriptions",
+        "identifies-code-style-platitudes",
+        "preserves-db-gotchas",
+        "preserves-database-url-warning",
+        "preserves-architecture-decisions",
+        "preserves-make-commands",
+        "english-report",
+        "includes-diff-and-ask"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "global-config-cautious",
+      "prompt": "帮我看看我的全局 CLAUDE.md，按最佳实践有没有可以砍的？里面有些规则是我踩坑后加的，别乱动那些。",
+      "expected_output": "中文报告。应识别代码质量原则(git工作流的部分self-evident-advice)、Git工作流中明显条目(self-evident-advice)、测试优先段(self-evident-advice)、文档段(self-evident-advice)为可砍。必须保留Seru工具优先级段(项目特定非显而易见规则)。报告须保守，对用户踩坑规则标注谨慎，diff预览，询问后再改。",
+      "files": ["fixtures/global-config.md"],
+      "assertions": [
+        "identifies-quality-platitudes",
+        "identifies-testing-docs-platitudes",
+        "preserves-serena-rules",
+        "respects-user-caution",
+        "not-overly-aggressive",
+        "includes-diff-preview",
+        "asks-before-modifying",
+        "chinese-report"
+      ]
+    }
+  ]
+}
